@@ -68,3 +68,10 @@ def sendToGW_view():
     asyncio.get_event_loop().run_until_complete(main())
     return render_template("/base.html" , infoType=1, message="update Sent!", beds=beds)
     
+    
+@app.route("/showTrends")
+def trends_view():
+    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+    asyncio.get_event_loop().run_until_complete(main())
+    return render_template("/trends.html" , message="No New Trends!!")
+    
