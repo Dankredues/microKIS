@@ -117,7 +117,7 @@ def admit_view():
 
         return redirect(url_for('sendToGW_view'))
 
-    return render_template("/admit.html" , message="Bitte Alle Infos ausfüllen")
+    return render_template("/admit.html" )
 
 @app.route("/sqltest")
 def sqltest():
@@ -129,8 +129,11 @@ def sqltest():
 
 @app.route("/discharge/<patientID>")
 def discharge_view(patientID):
-    
-    
-    asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    asyncio.get_event_loop().run_until_complete(discharge(patientID))
-    return render_template("/base.html" , infoType=1, message="Patient Discharged", beds=beds)
+    try:
+        database.deletePatient(patientID)
+        asyncio.set_event_loop(asyncio.SelectorEventLoop())
+        asyncio.get_event_loop().run_until_complete(discharge(patientID))
+        updateBeds()
+        return render_template("/base.html" , infoType=1, message="Aktualisierung an Monitoring gesendet!", beds=beds)
+    except:
+        return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!", beds=beds)

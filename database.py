@@ -36,13 +36,21 @@ def instertPatient(patient):
     sql = "select max(id) from patients"
     cursor.execute(sql)
 
-    maxid =0 
-    for data in cursor:
-        maxid = data[0]+1        
+    
          
-    print(maxid)
+    
     sql = "INSERT INTO patients VALUES('"+patient.givenName+"', " \
-    "'"+patient.lastName+"', "+str(maxid)+", '"+patient.patientID+"', '"+patient.station+"', '"+patient.bed+"')"
+    "'"+patient.lastName+"', "+str(patient.patientID)+", '"+patient.patientID+"', '"+patient.station+"', '"+patient.bed+"')"
+    cursor.execute(sql)
+    connection.commit()
+    connection.close()
+    return True
+
+def deletePatient(patientID):
+    connection = sqlite3.connect(config.DATABASE_PATH)
+    cursor = connection.cursor()
+       
+    sql = "DELETE FROM patients WHERE patientID='"+patientID+"'"
     cursor.execute(sql)
     connection.commit()
     connection.close()
