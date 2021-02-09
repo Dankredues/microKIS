@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Dankredues.com Version 8</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="/static/css/business-frontpage.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  {% include 'navbar.html' %}
+
+  
+
+  <!-- Page Content -->
+  <div class="container mt-4">
+
+    <div class="row">
+      <div class="col-md-8 mb-5">
+        <h2>Unser Rust Server</h2>
+        <hr>
+        <p> Bock auf RP / SChnetzel Rust? </p>
+        <a class="btn btn-primary btn-lg" href="#">Ab GEHTS! &raquo;</a>
+      </div>
+      <div class="col-md-4 mb-5">
+        <h2>Server Status</h2>
+        <hr>
+        Online : {{playercount}}<br>
+        Spielerliste: <hr>
+        {%for player in players%}
+          <a href="https://steamcommunity.com/profiles/{{player['SteamID']}}"> {{player['DisplayName']}} </a> <br>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- /.row -->
+
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="footer navbar-fixed-bottom py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; dankredues.com 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/static/vendor/jquery/jquery.min.js"></script>
+  <script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

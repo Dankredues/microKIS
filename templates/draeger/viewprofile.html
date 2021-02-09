@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Dankredues.com ACP</title>
+        <link href="/static/css/styles.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        {% include 'draeger/topbar.html' %}
+        {% include 'draeger/leftnav.html' %}
+
+
+
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid">
+                        <h1 class="mt-4">Profil-Details</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">Dankredues.com - <a href='/draeger/listConfigs'> ProfilListe </a> / {{profileDetails.name}}</li>
+                        </ol>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">SW Version : {{profileDetails.swVersion}} <br> Ort : {{profileDetails.city}} <br> Krankenhaus {{profileDetails.hospital}}<br> Station: {{profileDetails.station}} </li>
+                        </ol>
+                                          
+                        
+
+
+                      
+                        <!-- HERE START RENDERED DATA-->
+                        {% for profile in configs%}
+                          
+                       
+                        <div class="card ">
+                            <div class="card-header">
+                                <i class="fas fa-table mr-1"></i>
+                                <a  data-toggle="collapse" href="#collapse{{loop.index}}" role="button" aria-expanded="true" aria-controls="collapse{{loop.index}}">
+                                 {{profile}}  </a>
+
+                            </div>
+                            <div class="collapse" id="collapse{{loop.index}}">
+
+                                <div class="card ">
+                                    <div class="card-header">
+                                      <i class="fas fa-bell mr-1"></i>
+                                      <a  data-toggle="collapse" href="#collapse_alarms{{loop.index}}" role="button" aria-expanded="true" aria-controls="collapse_alarms{{loop.index}}">
+                                      Alarme </a>
+    
+                                     </div>
+                                
+                                   <div class="collapse" id="collapse_alarms{{loop.index}}">
+
+                                    <div class="row">
+                                        <div class="col-md-5">
+
+                                            <div class="card-body">
+                                                <div class="card-header">
+                                                    <i class="fas fa-table mr-1"></i>
+                                                
+                                                    Invasive Pressures 
+                    
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Label</th>
+                                                                <th>Systole </th>
+                                                                <th>Mitteldruck</th>
+                                                                <th>Diastole </th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr> 
+                                                                <th>Label</th>
+                                                                <th>Systole</th>
+                                                                <th>Mitteldruck</th>
+                                                                <th>Diastole</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {% for pressure in configs[profile].pressureLimits %}
+                                                            
+                                                            <tr>
+                                                                <td>{{pressure}}    </td>
+                                                                <td>
+                                                                    {% if configs[profile].pressureLimits[pressure].sys.upper|string !=""  %}
+                                                                        <i class="fas fa-arrow-up mr-1"></i>{{configs[profile].pressureLimits[pressure].sys.upper }} mmHg <br> <i class="fas fa-arrow-down mr-1"></i>{{configs[profile].pressureLimits[pressure].sys.lower }} mmHg
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>
+                                                                    {% if configs[profile].pressureLimits[pressure].mean.upper|string !=""  %}
+                                                                        <i class="fas fa-arrow-up mr-1"></i>{{configs[profile].pressureLimits[pressure].mean.upper }} mmHg <br><i class="fas fa-arrow-down mr-1"></i>{{configs[profile].pressureLimits[pressure].mean.lower }} mmHg
+                                                                    {% endif %}
+    
+                                                                </td>
+                                                                <td>
+                                                                    {% if configs[profile].pressureLimits[pressure].dia.upper|string !=""  %}
+                                                                     <i class="fas fa-arrow-up mr-1"></i>{{configs[profile].pressureLimits[pressure].dia.upper }} mmHg <br><i class="fas fa-arrow-down mr-1"></i>{{configs[profile].pressureLimits[pressure].dia.lower }} mmHg
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>-</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card-body">
+                                                <div class="card-header">
+                                                    <i class="fas fa-table mr-1"></i>
+                                                
+                                                    EKG 
+                    
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Label</th>
+                                                                <th>Oberer</th>
+                                                                <th>Unterer</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr> 
+                                                                <th>Label</th>
+                                                                <th>Oberer</th>
+                                                                <th>Unterer</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {% for limit in configs[profile].ecg %}
+                                                            
+                                                            <tr>
+                                                                <td>{{limit}}    </td>
+                                                                <td> {{configs[profile].ecg[limit].limit.upper }} </td>
+                                                                <td> {{configs[profile].ecg[limit].limit.lower }} </td>
+                                                                <td>-</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="card-header">
+                                                    <i class="fas fa-table mr-1"></i>
+                                                
+                                                    Spo2
+                    
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Label</th>
+                                                                <th>Oberer</th>
+                                                                <th>Unterer</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr> 
+                                                                <th>Label</th>
+                                                                <th>Oberer</th>
+                                                                <th>Unterer</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {% for limit in configs[profile].spo2Limits %}
+                                                            
+                                                            <tr>
+                                                                <td>{{limit}}    </td>
+                                                                <td> {{configs[profile].spo2Limits[limit].limit.upper }} </td>
+                                                                <td> {{configs[profile].spo2Limits[limit].limit.lower }} </td>
+                                                                <td>-</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="card-body">
+                                                <div class="card-header">
+                                                    <i class="fas fa-table mr-1"></i>
+                                                
+                                                    Temperatur 
+                    
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Label</th>
+                                                                <th>Oberer</th>
+                                                                <th>Unterer</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                            <tr> 
+                                                                <th>Label</th>
+                                                                <th>Oberer</th>
+                                                                <th>Unterer</th>
+                                                                <th>Aktiv?</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                            {% for limit in configs[profile].temperatures %}
+                                                            
+                                                            <tr>
+                                                                <td>{{limit}}    </td>
+                                                                <td> {{configs[profile].temperatures[limit].limit.upper }} </td>
+                                                                <td> {{configs[profile].temperatures[limit].limit.lower }} </td>
+                                                                <td>-</td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                
+                                
+                                
+                                
+                                </div>
+                            </div>  
+                         </div>       
+                    </div>
+
+                    <br><br>
+                    <!-- ---------------------------------------->
+                    {% endfor %}
+                    
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Your Website 2020</div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="/static/vendor/js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/chart-area-demo.js"></script>
+        <script src="assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/datatables-demo.js"></script>
+    </body>
+</html>
