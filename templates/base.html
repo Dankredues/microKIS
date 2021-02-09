@@ -55,6 +55,7 @@
 												<h5 class="card-header">
 													{% if beds[bed].givenName is defined %}
 													<img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceOccupiedFilterIcon.svg height=42px> 
+													<a href="/discharge/{{beds[bed].patientID}}"> (Entlassen)</a>
 													{% else %}
 													<img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceFree.svg height=42px>
 													{% endif %}
@@ -69,7 +70,7 @@
 														{% else %}
 														Freies Bett<br>
 														<br>
-														<a href="aufnahme.html"> Aufnehmen </a>
+														<a href="/admit"> Aufnehmen </a>
 														{% endif %}
 														
 													</p>

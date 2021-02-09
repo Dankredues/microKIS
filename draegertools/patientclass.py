@@ -20,6 +20,10 @@ class HL7Utils:
         resulting_message += "PID|||"+patient.patientID+"||"+patient.lastName+"^"+patient.givenName+"||194204301420|M||W|13 Beer St.^#123^Beersteinville^VA^12345-6785^USA|978 907-7333|||spa|M|JEW|1001|012-34-5678|||||||||THA\r"
         resulting_message += "PV1|||"+patient.station+"^200^"+patient.bed+"||||021-55-1366^Munster^Florence^S^II^Mr.^M.D.||||||||||0001^Carr^Mary^Jones^II^Mrs.^M.D.|||||||||||||||||||||||||||202102090909\r"
         return resulting_message
+    def getDischargeMessage(patientID):
+        message = "MSH|^~\&|HIS||Infinity||199903291650||ADT^A03|99022916500500050122|P|2.3\r"
+        message += "PID|||"+patientID+"||\r"
+        return message
 
 class PatientRecord:
     def __init__(self, givenName="",lastName="",patientID="",admissionDate="",station="",bed=""):
@@ -30,7 +34,6 @@ class PatientRecord:
         self.station        =   station
         self.bed            =   bed
 
-    
 
 
 
