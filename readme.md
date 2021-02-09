@@ -22,7 +22,9 @@ pip install flask hl7 websockets asyncio
 
 3. In der Config File (config.py) die Server Adresse und Port des HL7 Gateways eintragen
 
+4. Im Gateway des Vista120 Gateways die IP des sendenden Systemes eintragen.
 
+![Screenshot GW](https://raw.githubusercontent.com/Dankredues/microKIS/master/gateway_settings.png)
 
 ## Start der Applikation
 
