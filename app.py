@@ -5,6 +5,8 @@ from draegertools.patientclass import PatientRecord,HL7Utils
 import hl7
 from hl7.mllp import open_hl7_connection
 import asyncio
+import config
+
 app = Flask(__name__)
 
 
@@ -17,8 +19,8 @@ beds={ "bed1":patientA,"bed2":patientB,"bed3":None}
 
 async def sendMesasge(message):
     hl7_reader, hl7_writer = await asyncio.wait_for(
-        open_hl7_connection("192.168.1.121", 9100),
-        timeout=10,
+        open_hl7_connection(config.HL7_SERVER_IP, config.HL7_SERVER_PORT),
+        timeout=config.HL7_TIMEOUT,
     )
 
     hl7_message = hl7.parse(message)
@@ -64,5 +66,5 @@ def index():
 def sendToGW_view():
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(main())
-    return render_template("/base.html" , infoType=1, message="update Sent!")
+    return render_template("/base.html" , infoType=1, message="update Sent!", beds=beds)
     
