@@ -6,16 +6,30 @@ import hl7
 from hl7.mllp import open_hl7_connection
 import asyncio
 import config
+import database
+
+
 
 app = Flask(__name__)
 
 
-patientB = None #PatientRecord(givenName ="Thomas", lastName="Hasse", patientID= "1", bed="Bett1", station="ITS")
+patientB = PatientRecord(givenName ="Thomas", lastName="Hasse", patientID= "1", bed="Bett1", station="ITS")
 patientA = None #PatientRecord(givenName ="Patrick", lastName="Giannogonas", patientID= "2", bed="Bett42", station="ITS")
 
 
 
-beds={ "bed1":patientA,"bed2":patientB,"bed3":None, "bed4":None}
+database.initDB()
+beds= {}
+
+
+def updateBedList():
+    global beds
+    beds = database.getPatients()
+
+
+
+updateBedList()
+
 
 async def sendMesasge(message):
     hl7_reader, hl7_writer = await asyncio.wait_for(
@@ -62,6 +76,7 @@ async def discharge(patientID):
             if (patient.patientID==patientID):
                 beds[bed] = None
     await sendMesasge(discharge)
+    
 
 
 app.route('/static/<path:path>')
@@ -76,9 +91,12 @@ def index():
     
 @app.route("/sendToGW")
 def sendToGW_view():
-    asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    asyncio.get_event_loop().run_until_complete(updateBeds())
-    return render_template("/base.html" , infoType=1, message="update Sent!", beds=beds)
+    try:
+        asyncio.set_event_loop(asyncio.SelectorEventLoop())
+        asyncio.get_event_loop().run_until_complete(updateBeds())
+        return render_template("/base.html" , infoType=1, message="Aktualisierung an Monitoring gesendet!", beds=beds)
+    except:
+        return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!", beds=beds)
     
     
 @app.route("/showTrends")
@@ -94,17 +112,55 @@ def admit_view():
     if request.method == 'POST':
         data = request.form
         newPatient = PatientRecord(givenName =data["givenName"], lastName=data["lastName"], patientID=data["patientID"], bed=data["bed"], station=data["station"])
-        beds[data["bed"]] = newPatient
+        database.instertPatient(newPatient)
+        updateBedList()
+#        beds[data["bed"]] = newPatient 
 
         return redirect(url_for('sendToGW_view'))
 
-    return render_template("/admit.html" , message="Bitte Alle Infos ausfüllen")
+    return render_template("/admit.html" )
+
+
+  
 
 
 @app.route("/discharge/<patientID>")
 def discharge_view(patientID):
-    
+    print(patientID)
+   
+    try:
+        
+        for bed in beds:
+            print(beds)
+            print(beds[bed].patientID)
+            if beds[bed].patientID==str(patientID):
+                
+                database.deletePatient(patientID)
+                try:
+                    asyncio.set_event_loop(asyncio.SelectorEventLoop())
+                    asyncio.get_event_loop().run_until_complete(discharge(patientID))
+                    del beds[bed]
+                    updateBedList()
+                    return render_template("/base.html" , infoType=1, message="Betten aktualisiert!", beds=beds)
+                except:
+                    return render_template("/base.html" , infoType=2, message="Gateway ASYNC Error", beds=beds)
+        return render_template("/base.html" , infoType=2, message="Bett nicht Gefunden!", beds=beds)    
+        
+        
+        
+            
+    except:
+        return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!", beds=beds)
+        
+        
+@app.route("/force_discharge/<patientID>")
+def forcedischarge(patientID):
+    print(patientID)
+    try:
+        asyncio.set_event_loop(asyncio.SelectorEventLoop())
+        asyncio.get_event_loop().run_until_complete(discharge(patientID))
+        
+        return render_template("/base.html" , infoType=2, message="FORCED Remove Bed!", beds=beds)
 
-    asyncio.set_event_loop(asyncio.SelectorEventLoop())
-    asyncio.get_event_loop().run_until_complete(discharge(patientID))
-    return render_template("/base.html" , infoType=1, message="Patient Discharged", beds=beds)
+    except:
+        return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!", beds=beds)
