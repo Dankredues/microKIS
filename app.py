@@ -121,6 +121,11 @@ def admit_view():
     return render_template("/admit.html" )
 
 
+@app.route("/sqltest")
+def sqltest():
+    database.instertPatient(patientB)
+    updateBeds()
+    return redirect(url_for('index'))
   
 
 
