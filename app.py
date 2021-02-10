@@ -7,6 +7,7 @@ from hl7.mllp import open_hl7_connection
 import asyncio
 import config
 import database
+from shared_data import *
 
 
 
@@ -19,18 +20,20 @@ patientA = None #PatientRecord(givenName ="Patrick", lastName="Giannogonas", pat
 
 
 database.initDB()
-beds= {}
 
 
 def updateBedList():
-    global beds
-    beds = database.getPatients()
+    
+    global beds, stations
 
+    beds = database.getBeds()
+    stations = database.getStationsFromBeds(beds)
+
+            
 
 
 updateBedList()
 
-stations={"ZNA","ITS"}
 
 
 async def sendMesasge(message):
@@ -69,16 +72,10 @@ async def updateBeds():
 async def discharge(patientID):
     global beds
     discharge = HL7Utils.getDischargeMessage(str(patientID))
-    for bed in beds:
-        patient = beds[bed]
-        
-        
-        if (beds[bed]!= None ):
-            print("bedisNotNONE")
-            if (patient.patientID==patientID):
-                beds[bed] = None
-    await sendMesasge(discharge)
+    database.clearPatient(patientID)
     
+    await sendMesasge(discharge)
+    updateBedList()
 
 
 app.route('/static/<path:path>')
@@ -108,20 +105,35 @@ def trends_view():
     
     
 @app.route("/admit", methods=['GET', 'POST'])
-
 def admit_view():
     
     if request.method == 'POST':
         data = request.form
         newPatient = PatientRecord(givenName =data["givenName"], lastName=data["lastName"], patientID=data["patientID"], bed=data["bed"], station=data["station"])
         database.instertPatient(newPatient)
-        updateBedList()
+        
+        for bedname in beds:
+            print(beds[bedname].bedLabel+"=="+data["bed"])
+            bed = beds[bedname]
+            if (bed.bedLabel == data["bed"]) and (bed.station == data["station"]):
+                bed.patient = newPatient
+                database.updateBed(bed)
+                updateBedList()
+                return redirect(url_for('sendToGW_view'))
+            else:
+                return render_template("/admit.html", infoType=2, message="Bett existiert nicht!" )
+        
 #        beds[data["bed"]] = newPatient 
 
         return redirect(url_for('sendToGW_view'))
 
     return render_template("/admit.html" )
 
+@app.route("/admit/<bed>", methods=['GET', 'POST'])
+def admit_view_filled(bed):
+    global beds
+    print (beds)
+    return render_template("/admit.html" , bed=bed , beds=beds)
 
   
 
@@ -133,12 +145,11 @@ def discharge_view(patientID):
     try:
         
         for bed in beds:
-            print(beds)
-            print(beds[bed].patientID)
-            if beds[bed].patientID==str(patientID):
+            
+            if beds[bed].patient.patientID==str(patientID):
                 
                 database.deletePatient(patientID)
-                del beds[bed]
+                
                 updateBedList()
                 try:
                     asyncio.set_event_loop(asyncio.SelectorEventLoop())
@@ -171,12 +182,9 @@ def forcedischarge(patientID):
 @app.route("/station/<station>")
 def staion_view(station):
     print(station)
-    global beds
-    viewbeds = {}
-    for bed in beds:
-        if beds[bed].station==station:
-            viewbeds[bed] = beds[bed]
-            
+    global beds,stations
+    viewbeds = stations[station]
+
 
     return render_template("/station_overview.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", beds=viewbeds , stations=stations,station=station)
 

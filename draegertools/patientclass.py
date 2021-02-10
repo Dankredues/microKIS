@@ -25,6 +25,7 @@ class HL7Utils:
         message += "PID|||"+patientID+"||\r"
         return message
 
+
 class PatientRecord:
     def __init__(self, givenName="",lastName="",patientID="",admissionDate="",station="",bed=""):
         self.givenName      =   givenName
@@ -33,6 +34,13 @@ class PatientRecord:
         self.admissionDate  =   admissionDate
         self.station        =   station
         self.bed            =   bed
+
+class BedRecord:
+    def __init__(self, bedID, bedLabel="",patient=None,station=""):
+        self.bedID = bedID
+        self.bedLabel = bedLabel
+        self.patient  = patient
+        self.station  = station
 
 
 

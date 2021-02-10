@@ -19,82 +19,10 @@
 					<main>
 					
 					
-					
-						{% if message is defined %}
-						
-						<div class="container-fluid">
-							<div class="row">
-								<div class="col-md-12">
-									{% if infoType==1 %}
-									<div class="alert alert-success alert-dismissable">
-									{% endif %}
-									{% if infoType==2 %}
-									<div class="alert alert-danger alert-dismissable">
-									{% endif %}	
-										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-											×
-										</button>
-										<h4>
-											Information
-										</h4> {{message}}
-									</div>
-								</div>
-							</div>
-						</div>
-						
-					{% endif %}
-					
-					
-						<div class="container-fluid">
-							<h1 class="mt-4">Station {{station}}</h1>
-							<ol class="breadcrumb mb-4">
-								<li class="breadcrumb-item active">Stations&uuml;bersicht / {{station}}</li>
-							</ol>
-							
-								<div class="container-fluid">
-									<div class="row">
-										{% for bed in beds %}
-										<div class="col-md-3">
-											<div class="card">
-												<h5 class="card-header">
-													{% if beds[bed].givenName is defined %}
-													<img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceOccupiedFilterIcon.svg height=42px> 
-													<a href="/discharge/{{beds[bed].patientID}}"> (Entlassen)</a>
-													{% else %}
-													<img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceFree.svg height=42px>
-													{% endif %}
-													{{bed}}
-												</h5>
-												<div class="card-body">
-													<p class="card-text" >
-														{% if beds[bed].givenName is defined %}
-														Name : {{beds[bed].givenName}} {{beds[bed].lastName}}<br>
-														Patienten ID: {{beds[bed].patientID}}<br>
-														Aufnahme Datum: 2021 01 01 14 30<br>
-														{% else %}
-														Freies Bett<br>
-														<br>
-														<a href="/admit"> Aufnehmen </a>
-														{% endif %}
-														
-													</p>
-												</div>
-												
-											</div>
-										</div>
-										{% endfor%}
-										<a class="btn btn-primary" href="/admit" role="button">Neu Aufnehmen</a>							
-										
-										
-											
-									</div>
-									
-							</div>
-					</div>
+						{% include 'patientcard.html' %}
 						
 								
-								
-				</main>
+					</main>
 			
 		
 

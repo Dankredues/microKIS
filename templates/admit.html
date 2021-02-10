@@ -89,8 +89,19 @@
 												<label for="bed">
 													Bettplatz
 												</label>
+												{%if beds is defined%}
+
+												<select class="form-control" id="sel1">
+													{% for bedName in beds %}													
+													<option {% if bedName == bed %} selected="selected" {% endif%}>
+														{{bedName}}
+													</option>
+													{%endfor%}
+												  </select>
+												{%else%}
 												<input type="text" value="Bett 4" class="form-control" id="bed"
 													name="bed" />
+												{%endif%}
 											</div>
 											<div class="form-group">
 												<label for="station">
