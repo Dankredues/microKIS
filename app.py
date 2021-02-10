@@ -121,11 +121,6 @@ def admit_view():
     return render_template("/admit.html" )
 
 
-@app.route("/sqltest")
-def sqltest():
-    database.instertPatient(patientB)
-    updateBeds()
-    return redirect(url_for('index'))
   
 
 
@@ -141,11 +136,12 @@ def discharge_view(patientID):
             if beds[bed].patientID==str(patientID):
                 
                 database.deletePatient(patientID)
+                del beds[bed]
+                updateBedList()
                 try:
                     asyncio.set_event_loop(asyncio.SelectorEventLoop())
                     asyncio.get_event_loop().run_until_complete(discharge(patientID))
-                    del beds[bed]
-                    updateBedList()
+                    
                     return render_template("/base.html" , infoType=1, message="Betten aktualisiert!", beds=beds)
                 except:
                     return render_template("/base.html" , infoType=2, message="Gateway ASYNC Error", beds=beds)
