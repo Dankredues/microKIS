@@ -30,10 +30,10 @@
         </ol>
 
         <div class="container-fluid">
-            <div class="row">
+            <div class="row no-gutters h-100" >
                 {% for bed in beds %}
-                <div class="col-auto">
-                    <div class="card">
+                <div class="col-4">
+                    <div class="card h-100">
                         <h6 class="card-header">
 
                             {% if beds[bed].patient.givenName is defined %}
@@ -44,23 +44,23 @@
                             {% endif %}
 
                         </h6>
-                        <div class="card-body flex-row flex-wrap">
-
+                        <div class="card-body flex-row flex-wrap  " >
+                            
                             <div class="row  no-gutters">
-                                <div class="col-auto">
-                                    <p class="card-text">
+                                <div class="col-3">
+                                    <p class="card-text" >
                                         {% if beds[bed].patient.givenName is defined %}
                                         <img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceOccupiedFilterIcon.svg
-                                            height=128re>
+                                            width=100%>
 
                                         {% else %}
-                                        <img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceFree.svg
-                                            height=100px>
+                                        <img  src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceFree.svg
+                                            width=100%>
                                         {% endif %}
                                     </p>
 
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-9">
                                     <p class="card-text">
                                         {% if beds[bed].patient.givenName is defined %}
                                         Name : {{beds[bed].patient.givenName}} {{beds[bed].patient.lastName}}<br>

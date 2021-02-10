@@ -120,8 +120,8 @@ def admit_view():
                 database.updateBed(bed)
                 updateBedList()
                 return redirect(url_for('sendToGW_view'))
-            else:
-                return render_template("/admit.html", infoType=2, message="Bett existiert nicht!" )
+            
+        return render_template("/admit.html", infoType=2, message="Bett existiert nicht!" )
         
 #        beds[data["bed"]] = newPatient 
 
