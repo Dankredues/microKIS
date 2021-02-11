@@ -46,7 +46,7 @@ async def sendHL7Patient(patient):
 async def updateBeds():
     global beds
     for bed in beds:
-        patient = beds[bed]
+        patient = beds[bed].patient
         if patient!=None:
             await sendHL7Patient(patient)
 
@@ -105,6 +105,11 @@ def admit_view():
 def discharge_view(patientID):
     
 
+<<<<<<< Updated upstream
     asyncio.set_event_loop(asyncio.SelectorEventLoop())
     asyncio.get_event_loop().run_until_complete(discharge(patientID))
     return render_template("/base.html" , infoType=1, message="Patient Discharged", beds=beds)
+=======
+
+
+>>>>>>> Stashed changes
