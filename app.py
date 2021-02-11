@@ -65,7 +65,7 @@ async def sendHL7Patient(patient):
 async def updateBeds():
     global beds
     for bed in beds:
-        patient = beds[bed]
+        patient = beds[bed].patient
         if patient!=None:
             await sendHL7Patient(patient)
 
