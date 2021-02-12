@@ -1,0 +1,94 @@
+{% if message is defined %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            {% if infoType==1 %}
+            <div class="alert alert-success alert-dismissable">
+                {% endif %}
+                {% if infoType==2 %}
+                <div class="alert alert-danger alert-dismissable">
+                    {% endif %}
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        ×
+                    </button>
+                    <h4>
+                        Information
+                    </h4> {{message}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+
+    <div class="container-fluid">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+
+        <div class="container-fluid">
+            <div class="row no-gutters h-100" >
+                {% for bed in beds %}
+                <div class="col-4">
+                    <div class="card h-100">
+                        <h6 class="card-header">
+
+                            {% if beds[bed].patient.givenName is defined %}
+                            {{beds[bed].patient.station}}/{{beds[bed].bedLabel}} {{beds[bed].patient.givenName}} {{beds[bed].patient.lastName}}
+
+                            {% else %}
+                            {{beds[bed].station}}/{{beds[bed].bedLabel}} (frei)
+                            {% endif %}
+
+                        </h6>
+                        <div class="card-body flex-row flex-wrap  " >
+                            
+                            <div class="row  no-gutters">
+                                <div class="col-3">
+                                    <p class="card-text" >
+                                        {% if beds[bed].patient.givenName is defined %}
+                                        <img src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceOccupiedFilterIcon.svg
+                                            width=100%>
+
+                                        {% else %}
+                                        <img  src=https://hcb.draeger.com/de-DE/assets/images/icons-new/bedSpaceFree.svg
+                                            width=100%>
+                                        {% endif %}
+                                    </p>
+
+                                </div>
+                                <div class="col-9">
+                                    <p class="card-text">
+                                        {% if beds[bed].patient.givenName is defined %}
+                                        Name : {{beds[bed].patient.givenName}} {{beds[bed].patient.lastName}}<br>
+                                        Patienten ID: {{beds[bed].patient.patientID}}<br>
+                                        Aufnahme : 2021 01 01 14 30<br>
+                                        <a class="btn btn-primary" href="/discharge/{{beds[bed].patient.patientID}}">
+                                            Entlassen</a>
+                                        <a class="btn btn-primary" href="/details/{{beds[bed].patient.patientID}}"
+                                            role="button">Details</a>
+                                        {% else %}
+                                        Freies Bett<br>
+                                        <br>
+                                        <a class="btn btn-primary" href="/admit/{{beds[bed].bedLabel}}" role="button">Neu
+                                            Aufnehmen</a>
+                                        {% endif %}
+
+                                    </p>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor%}
+
+            </div>
+            <a class="btn btn-primary" href="/admit" role="button">Neu Aufnehmen</a>
+        </div>
+    </div>
