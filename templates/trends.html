@@ -47,14 +47,53 @@
 
 
 				<div class="container-fluid">
-					<h1 class="mt-4">Dashboard</h1>
+					<h1 class="mt-4">Patientenstatus - {{patient.givenName}}  {{patient.lastName}}</h1>
 					<ol class="breadcrumb mb-4">
-						<li class="breadcrumb-item active">Dashboard</li>
+						<li class="breadcrumb-item active">
+							ID :{{patient.patientID}} <br>
+							Liegt auf {{patient.station}} in Bett {{patient.bed}}<br>
+							
+						</li>
 					</ol>
 				</div>
-
-
-
+				<div class="container-fluid">
+					<table class="table table-bordered table-hover table-sm">
+						<thead>
+							<tr>
+								<th>
+									Parameter Code
+								</th>
+								{% for value in trendscale %}
+								<th>
+									{{value}}
+								</th>
+								{% endfor %}
+							</tr>
+						</thead>
+						<tbody>
+							
+											
+									
+									
+								{% for data in trends %}
+								<tr>
+									<td>
+										{{data}} :
+									</td>
+									{% for value in trends[data] %}
+									<td>
+										{{value['val']}} 
+									</td>	
+										{% endfor%}
+								</tr>	
+									{% endfor %}	
+								
+							
+							
+							
+						</tbody>
+					</table>
+				</div>
 			</main>
 		</div>
 	</div>

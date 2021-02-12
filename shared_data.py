@@ -1,2 +1,3 @@
 beds= {}
 stations={}
+

@@ -1,6 +1,10 @@
 # boilerplate.
 import asyncio
 import aiorun
+import shared_data
+from draegertools.patientclass import PatientRecord
+from myutils import *
+
 
 import hl7
 from hl7.mllp import start_hl7_server
@@ -16,25 +20,22 @@ def parseHL7Message(message):
     nibp_dia=""
     nibp_mean=""
     temp =""
+    patient = None
     for segment in message:
         if str(segment[0])=="PID":   
             #print ("foundPatientRecord")
             patientID  =  segment[3]
+            patient = getPatientByID(str(patientID))
+
+            print("\n\n\n"+str(patient)+"\n\n\n")
         if str(segment[0])=="OBX":   
             #print ("foundOBX ")
-            if str(segment[2])=="NM":
-                if str(segment[3])=="393216^NIBP_SYS^EHC":
-                    nibp_sys = "NIBP SYS:  "+ str(segment[5])
-                if str(segment[3])=="393217^NIBP_DIA^EHC":
-                    nibp_dia = "NIBP DIA:  "+ str(segment[5])
-                if str(segment[3])=="393218^NIBP_MEAN^EHC":
-                    nibp_mean = "NIBP MEAN:  "+ str(segment[5])
-                if str(segment[3])=="524288^SPEEDY_TEMP^EHC":
-                    temp = "TEMP:  "+ str(segment[5])
-        else:
             print(str(segment)+"\n\n\n")
 
-    print("Updating Patient "+ str(patientID) +"\n \t "+nibp_sys +"\n \t "+nibp_dia +"\n \t "+nibp_mean+"\n \t "+temp)
+            patient.addTrend(str(segment[3]), str(segment[-1]) ,str(segment[5]))
+
+
+    #print("Updating Patient "+ str(patientID) +"\n \t "+nibp_sys +"\n \t "+nibp_dia +"\n \t "+nibp_mean+"\n \t "+temp)
 
 
 
@@ -68,7 +69,8 @@ async def process_hl7_messages(hl7_reader, hl7_writer):
     print(f"Connection closed {peername}")
 
 
-async def main():
+async def recieiver_loop():
+    print("Looping")
     try:
         # Start the server in a with clause to make sure we
         # close it
@@ -82,7 +84,14 @@ async def main():
         # Cancelled errors are expected
         pass
     except Exception:
-        print("Error occurred in main")
+        raise
+        #pass #print("Error occurred in main")
 
 
-aiorun.run(main(), stop_on_unhandled_errors=True)
+def start_hl7_receiver():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+
+    loop.run_until_complete(recieiver_loop())
+    loop.close()
+    #aiorun.run(recieiver_loop(), stop_on_unhandled_errors=True)

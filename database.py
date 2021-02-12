@@ -3,6 +3,7 @@ import config
 import os
 from draegertools.patientclass import PatientRecord, BedRecord
 from shared_data import *
+
 database = None
 
 def initDB():
@@ -75,21 +76,14 @@ def updateBed(bed):
 
 
 
-def getPatientByID(id):
+def getPatientFromDBByID(id):
     connection = sqlite3.connect(config.DATABASE_PATH)
     cursor = connection.cursor()
-
-
     sql = "SELECT * FROM patients WHERE patientID='"+str(id)+"'"
-
     cursor.execute(sql)
     patient = None
-    # Ausgabe des Ergebnisses
     for dsatz in cursor:
-        print("DBG:!  "+dsatz[5]+ dsatz[3])
         patient = PatientRecord(givenName=dsatz[0],lastName=dsatz[1],patientID=dsatz[3],station=dsatz[4],bed=dsatz[5])
-
-    # Verbindung beenden
     connection.close()
     return patient
 
@@ -111,8 +105,8 @@ def getBeds():
 
     # Ausgabe des Ergebnisses
     for dsatz in cursor:
-        patient = getPatientByID(dsatz[2])
-        #patient = PatientRecord(givenName ="Thomas", lastName="Hasse", patientID= "1", bed="Bett1", station="ITS")
+        patient = getPatientFromDBByID(dsatz[2])
+        print(str(patient))
         beds[dsatz[1]] = BedRecord(dsatz[0] , bedLabel=dsatz[1], patient=patient, station= dsatz[3] )
 
     # Verbindung beenden
