@@ -5,7 +5,7 @@ import shared_data
 from draegertools.patientclass import PatientRecord
 from myutils import *
 
-
+from datetime import datetime
 import hl7
 from hl7.mllp import start_hl7_server
 
@@ -13,26 +13,23 @@ from hl7.mllp import start_hl7_server
 
 
 def parseHL7Message(message):
-    print(f'Received message\n {message}'.replace('\r', '\n'))
-    print(type(message))
+    
     patientID  = -1
-    nibp_sys=""
-    nibp_dia=""
-    nibp_mean=""
-    temp =""
     patient = None
     for segment in message:
         if str(segment[0])=="PID":   
             #print ("foundPatientRecord")
             patientID  =  segment[3]
             patient = getPatientByID(str(patientID))
-
-            print("\n\n\n"+str(patient)+"\n\n\n")
         if str(segment[0])=="OBX":   
             #print ("foundOBX ")
-            print(str(segment)+"\n\n\n")
+            if str(segment[2])=="NM":          
+                datestr = str(segment[-1])
 
-            patient.addTrend(str(segment[3]), str(segment[-1]) ,str(segment[5]))
+                print(datestr)
+                date_time_obj = datetime.strptime(datestr, '%Y%m%d%H%M%S')
+                formattedDate = date_time_obj.strftime("%d.%m.%Y %H:%M")
+                patient.addTrend(str(segment[3]),  formattedDate ,str(segment[5]))
 
 
     #print("Updating Patient "+ str(patientID) +"\n \t "+nibp_sys +"\n \t "+nibp_dia +"\n \t "+nibp_mean+"\n \t "+temp)

@@ -32,6 +32,15 @@ def setupDB():
       "station TEXT)"
     cursor.execute(sql)
 
+
+    sql = "CREATE TABLE trend_data(" \
+      "trendID INTEGER PRIMARY KEY AUTOINCREMENT, " \
+      "patientID TEXT, " \
+      "timestring TEXT, " \
+      "unit TEXT, " \
+      "value TEXT)"
+    cursor.execute(sql)
+
     sql = "INSERT INTO patients VALUES('Julia', " \
       "'Mertens', 0, '1337_42', 'ITS', 'bed2')"
     cursor.execute(sql)
@@ -135,7 +144,7 @@ def instertPatient(patient):
     sql = "select max(id) from patients"
     cursor.execute(sql)
 
-    
+
          
     
     sql = "INSERT INTO patients VALUES('"+patient.givenName+"', " \
@@ -154,6 +163,8 @@ def deletePatient(patientID):
     connection.commit()
     connection.close()
     return True
+
+
 
 def getPatients():
     beds ={}

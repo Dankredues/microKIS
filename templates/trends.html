@@ -75,16 +75,16 @@
 											
 									
 									
-								{% for data in trends %}
+								{% for parmLabel in paramLabels %}
 								<tr>
 									<td>
-										{{data}} :
+										{{parmLabel}} :
 									</td>
-									{% for value in trends[data] %}
+									{% for date in trendscale %}
 									<td>
-										{{value['val']}} 
+										{{ trends[date][parmLabel] }} 
 									</td>	
-										{% endfor%}
+									{% endfor%}
 								</tr>	
 									{% endfor %}	
 								
@@ -93,6 +93,13 @@
 							
 						</tbody>
 					</table>
+
+					<hr> 
+
+					
+
+					{% include 'trendgraph.html' %}
+
 				</div>
 			</main>
 		</div>
@@ -120,8 +127,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
 	<script src="/static/vendor/js/scripts.js"></script>
-
-
+	
 </body>
 
 </html>

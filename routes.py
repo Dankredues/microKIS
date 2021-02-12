@@ -126,8 +126,11 @@ def staion_view(station):
 def patient_view(patientID):    
     patient = getPatientByID(str(patientID))
 
-    trends  = patient.getTrendByName()
-    trendscale  = patient.getTrendDateScale()
-    print(str(trendscale))
     
-    return render_template("/trends.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", patient=patient, trends= trends, trendscale=trendscale)
+
+
+    d = patient.trends
+    dateHeader = sorted(d.keys())
+    paramLabels = sorted(list({k2 for v in d.values() for k2 in v}))
+    
+    return render_template("/trends.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", patient=patient, paramLabels= paramLabels,  trends=d, trendscale=dateHeader)

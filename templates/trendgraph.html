@@ -1,0 +1,34 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+<script>
+
+
+
+
+
+
+
+var ctx = document.getElementById('myChart');
+var mixedChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        datasets: [ {
+            label: 'Line Dataset',
+            data: [50, 30, 10, 50],
+
+            // Changes this dataset to become a line
+            type: 'line'
+        }],
+        labels: ['1', '2', '3', '4']
+    },
+    options:      {color: [
+    'red',    // color for data at index 0
+    'blue',   // color for data at index 1
+    'green',  // color for data at index 2
+    'black']}
+});
+
+
+</script>
