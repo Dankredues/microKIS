@@ -41,8 +41,8 @@ class PatientRecord:
         self.station        =   station
         self.bed            =   bed
         self.trends         =   defaultdict(dict)
-
-
+        
+       
     def addTrend(self, name, date, value):        
         self.trends[date][name] = value
 

@@ -11,6 +11,7 @@ from hl7_sender import *
 from threading import Thread
 from myutils import *
 from main import app
+import json
 
 @app.route('/static/<path:path>')
 def send_js(path):
@@ -122,6 +123,9 @@ def staion_view(station):
 
     return render_template("/station_overview.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", beds=viewbeds , stations=shared_data.stations,station=station)
 
+
+
+
 @app.route("/viewPatient/<patientID>")
 def patient_view(patientID):    
     patient = getPatientByID(str(patientID))
@@ -132,5 +136,18 @@ def patient_view(patientID):
     d = patient.trends
     dateHeader = sorted(d.keys())
     paramLabels = sorted(list({k2 for v in d.values() for k2 in v}))
-    
-    return render_template("/trends.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", patient=patient, paramLabels= paramLabels,  trends=d, trendscale=dateHeader)
+    print(paramLabels)
+    paramData = {}
+    colors = ['red','blue','green','black','pink','grey','yellow']
+    for parm in paramLabels:
+        paramValue = []
+        for date in dateHeader:
+            if parm in d[date]:
+                value = {'x':(d[date].get(parm, '-')), 'y':date}
+                paramValue.append(value)
+        
+        paramData[parm] = paramValue
+    print(paramData)
+
+
+    return render_template("/trends.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", patient=patient, trendColor=colors, paramLabels= paramLabels,  trends=d, trendscale=dateHeader, paramData=paramData)

@@ -1,33 +1,54 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
-<canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="myChart" width="100%" height="30%"></canvas>
+
+
+
+                                    
+
 <script>
-
-
-
-
-
 
 
 var ctx = document.getElementById('myChart');
 var mixedChart = new Chart(ctx, {
     type: 'bar',
-    data: {
-        datasets: [ {
-            label: 'Line Dataset',
-            data: [50, 30, 10, 50],
+    responsive: true,
 
-            // Changes this dataset to become a line
-            type: 'line'
-        }],
-        labels: ['1', '2', '3', '4']
+    // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+
+    maintainAspectRatio: true,
+    data: {
+        datasets: [ 
+
+
+        {% for paramVal in paramData  %}
+        {
+                    label: '{{paramVal}}',
+                    
+                    data: [  
+                         {% for point in paramData[paramVal] %} 
+                         {
+                            y:{{point['x']}}, 
+                            x:'{{point['y']}}'
+                        } {% if not loop.last%}, {% endif%}	
+                        {% endfor %}
+                    ]    ,
+                    // Changes this dataset to become a line
+                    type: 'line',
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(225,0,0,0.4)",
+                    borderColor: '{{trendColor[loop.index0]}}',
+                    borderCapStyle: 'square',
+                }{% if not loop.last%}, {% endif%}			
+            		
+         {% endfor %}	
+
+         ],
+        labels: {{trendscale|safe}}
     },
-    options:      {color: [
-    'red',    // color for data at index 0
-    'blue',   // color for data at index 1
-    'green',  // color for data at index 2
-    'black']}
+    options:      {}
 });
 
 
