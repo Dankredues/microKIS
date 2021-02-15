@@ -1,6 +1,6 @@
 from flask import Flask, render_template, session, redirect, url_for, escape, request
 from utilities.hl7_tools import HL7Utils
-
+from hl7_sender import updateBeds
 from models.patient_model import PatientRecord
 from models.bed_model import BedRecord
 
@@ -40,6 +40,7 @@ def sendToGW_view():
             asyncio.get_event_loop().run_until_complete(updateBeds())
             return render_template("/base.html" , infoType=1, message="Aktualisierung an Monitoring gesendet!",stations=shared_data.stations, beds=shared_data.beds)
         except:
+            traceback.print_exc() 
             return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!",stations=shared_data.stations, beds=shared_data.beds)
     else:
         return render_template("/base.html" ,stations=shared_data.stations, beds=shared_data.beds)

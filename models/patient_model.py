@@ -9,7 +9,12 @@ class PatientRecord:
         self.station        =   station
         self.bed            =   bed
         self.trends         =   defaultdict(dict)
-        
+    
+        self.addTrend("spo2","11:00", "99")
+        self.addTrend("spo2","11:05", "98")
+        self.addTrend("spo2","11:10", "97")
+        self.addTrend("spo2","11:15", "100")
+
        
     def addTrend(self, name, date, value):        
         self.trends[date][name] = value

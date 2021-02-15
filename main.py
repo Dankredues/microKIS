@@ -3,7 +3,7 @@ from utilities.hl7_tools import HL7Utils
 from models.patient_model import PatientRecord
 from models.bed_model import BedRecord
 import hl7
-from hl7.mllp import open_hl7_connection
+
 import asyncio,aiorun
 import config
 import database
@@ -21,7 +21,6 @@ import routes
 
 database.initDB()
 
-
 updateBedList()
 
 
@@ -30,30 +29,3 @@ if config.USE_HL7_INBOUND:
     _thread = Thread(target=asyncio.run, args=(recieiver_loop(),))
     _thread.start()
     print("\t [OK]")
-
-
-
-
-#testPat =   getPatientByID("421337")
-
-#print(str(testPat))
-
-
-
-
-
-
-
-
-
-async def updateBeds():
-    global beds
-    for bed in beds:
-        patient = beds[bed].patient
-        if patient!=None:
-            await sendHL7Patient(patient)
-
-
-
-
-

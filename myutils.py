@@ -19,6 +19,7 @@ def updateBedList():
 def getPatientByID(patientID):
     beds = shared_data.beds
     for bed in beds:
-        if str(beds[bed].patient.patientID) == str(patientID):
-            return beds[bed].patient
+        if not beds[bed].patient==None:
+            if str(beds[bed].patient.patientID) == str(patientID):
+                return beds[bed].patient
     return None          

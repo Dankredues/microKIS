@@ -1,5 +1,10 @@
 import shared_data
 from myutils import *
+from utilities.hl7_tools import HL7Utils
+import asyncio
+from hl7.mllp import open_hl7_connection
+import config
+import hl7
 
 async def sendMesasge(message):
     hl7_reader, hl7_writer = await asyncio.wait_for(
@@ -32,3 +37,13 @@ async def discharge(patientID):
     
     await sendMesasge(discharge)
     updateBedList()
+
+
+
+
+async def updateBeds():
+    
+    for bed in shared_data.beds:
+        patient = shared_data.beds[bed].patient
+        if patient!=None:
+            await sendHL7Patient(patient)
