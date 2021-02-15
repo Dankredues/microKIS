@@ -58,9 +58,16 @@ Für einen Produktivbetrieb ist der in Flask eingebaute Webserver nicht geeignet
 
 Übersichtsseite
 
+Hier werden Patienten Aufgenommen  und Entlassen, sowie die Details aufgerufen.
+
 ![Homescreen](https://github.com/Dankredues/microKIS/raw/master/doc/homeScreen.png)
 
+Bei der Patientenaufnahme müssen alle Felder ausgefüllt sein.
+Aktuell keine Umlaute / Sonderzeichen
+
 ![Admit Patient](https://github.com/Dankredues/microKIS/raw/master/doc/admit.png)
+
+Trendanzeige unter Details. Aktuell ohne Filter / Skalierungsmöglichkeiten
 
 ![Admit Patient](https://github.com/Dankredues/microKIS/raw/master/doc/trends2.png)
 
