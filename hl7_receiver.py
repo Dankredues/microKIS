@@ -32,7 +32,8 @@ def parseHL7Message(message):
                 print(datestr)
                 date_time_obj = datetime.strptime(datestr, '%Y%m%d%H%M%S')
                 formattedDate = date_time_obj.strftime("%d.%m.%Y %H:%M")
-                patient.addTrend(str(segment[3]),  formattedDate ,str(segment[5]))
+                if(patient!=None):
+                    patient.addTrend(str(segment[3]),  formattedDate ,str(segment[5]))
 
 
     #print("Updating Patient "+ str(patientID) +"\n \t "+nibp_sys +"\n \t "+nibp_dia +"\n \t "+nibp_mean+"\n \t "+temp)
