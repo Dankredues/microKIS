@@ -136,7 +136,7 @@ def patient_view(patientID):
     d = patient.trends
     dateHeader = sorted(d.keys())
     paramLabels = sorted(list({k2 for v in d.values() for k2 in v}))
-    print(paramLabels)
+    'print(paramLabels)
     paramData = {}
     colors = ['red','blue','green','black','pink','grey','yellow']
     for parm in paramLabels:
@@ -147,7 +147,7 @@ def patient_view(patientID):
                 paramValue.append(value)
         
         paramData[parm] = paramValue
-    print(paramData)
+    'print(paramData)
 
 
     return render_template("/trends.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", patient=patient, trendColor=colors, paramLabels= paramLabels,  trends=d, trendscale=dateHeader, paramData=paramData)
