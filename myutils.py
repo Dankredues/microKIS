@@ -1,6 +1,7 @@
 import shared_data
 import database
-from draegertools.patientclass import PatientRecord
+from models.patient_model import PatientRecord
+#from models.bed_model import BedRecord
 
 
 

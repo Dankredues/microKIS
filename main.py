@@ -1,5 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, escape, request
-from draegertools.patientclass import PatientRecord,HL7Utils
+from utilities.hl7_tools import HL7Utils
+from models.patient_model import PatientRecord
+from models.bed_model import BedRecord
 import hl7
 from hl7.mllp import open_hl7_connection
 import asyncio,aiorun
@@ -23,10 +25,12 @@ database.initDB()
 updateBedList()
 
 
-print("Starting HL7 Listener Deamon ....")
-_thread = Thread(target=asyncio.run, args=(recieiver_loop(),))
-_thread.start()
-print("\t [OK]")
+if config.USE_HL7_INBOUND:
+    print("Starting HL7 Listener Deamon ....")
+    _thread = Thread(target=asyncio.run, args=(recieiver_loop(),))
+    _thread.start()
+    print("\t [OK]")
+
 
 
 

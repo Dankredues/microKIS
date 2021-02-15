@@ -2,7 +2,10 @@
 import asyncio
 import aiorun
 import shared_data
-from draegertools.patientclass import PatientRecord
+
+from models.patient_model import PatientRecord
+#from models.bed_model import BedRecord
+
 from myutils import *
 
 from datetime import datetime
