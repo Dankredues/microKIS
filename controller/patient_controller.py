@@ -5,6 +5,7 @@ import database
 from models.patient_model import PatientRecord
 import sqlite3
 import config
+import shared_data
 
 def getPatientFromDBByID(id):
     connection = sqlite3.connect(config.DATABASE_PATH)
@@ -18,11 +19,12 @@ def getPatientFromDBByID(id):
     return patient
 
 def clearPatient(id):
-    global beds
-    for bed in beds:
-        if(id==beds[bed].patient.patientID):
-            beds[bed].patient = None
-            return True
+    
+    for bed in shared_data.beds:
+        if (shared_data.beds[bed].patient != None):
+            if(id==shared_data.beds[bed].patient.patientID):
+                beds[bed].patient = None
+                return True
     return False
 
 

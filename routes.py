@@ -87,22 +87,22 @@ def discharge_view(patientID):
     try:
         
         for bed in shared_data.beds:
-            
-            if shared_data.beds[bed].patient.patientID==str(patientID):
-                
-                database.deletePatient(patientID)
-                
-                updateBedList()
-                if(config.USE_HL7_OUTBOUND):
-                    try:
-                        asyncio.set_event_loop(asyncio.SelectorEventLoop())
-                        asyncio.get_event_loop().run_until_complete(discharge(patientID))
-                        
-                        return render_template("/base.html" , infoType=1, message="Betten aktualisiert!", stations=shared_data.stations,beds=shared_data.beds)
-                    except:
-                        return render_template("/base.html" , infoType=2, message="Gateway ASYNC Error",stations=shared_data.stations, beds=shared_data.beds)
-                else:
-                    return render_template("/base.html" ,  stations=shared_data.stations,beds=shared_data.beds)
+            if shared_data.beds[bed].patient != None:
+                if shared_data.beds[bed].patient.patientID==str(patientID):
+                    
+                    database.deletePatient(patientID)
+                    
+                    updateBedList()
+                    if(config.USE_HL7_OUTBOUND):
+                        try:
+                            asyncio.set_event_loop(asyncio.SelectorEventLoop())
+                            asyncio.get_event_loop().run_until_complete(discharge(patientID))
+                            
+                            return render_template("/base.html" , infoType=1, message="Betten aktualisiert!", stations=shared_data.stations,beds=shared_data.beds)
+                        except:
+                            return render_template("/base.html" , infoType=2, message="Gateway ASYNC Error",stations=shared_data.stations, beds=shared_data.beds)
+                    else:
+                        return render_template("/base.html" ,  stations=shared_data.stations,beds=shared_data.beds)
         return render_template("/base.html" , infoType=2, message="Bett nicht Gefunden!", beds=shared_data.beds, stations=shared_data.stations)    
         
         
