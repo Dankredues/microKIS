@@ -8,3 +8,12 @@ USE_DEMO_DATA = True
 USE_HL7_OUTBOUND = True   #-> HL7 Inbound am GW
 USE_HL7_INBOUND  = True
 DB_ENGINE = "sqlite"
+
+INSTANCE_NAME   =   "MicroKIS for SALES Demonstration"
+
+DISPLAY_GW_IP           = True
+DISPLAY_BRANCH_LABEL    = True
+BRANCH_LABEL   =    "STAGING"
+
+VERSION_TAG     =   "0.4 (master)"
+
