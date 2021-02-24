@@ -24,7 +24,7 @@ var mixedChart = new Chart(ctx, {
 
         {% for paramVal in paramData  %}
         {
-                    label: '{{paramVal}}',
+                    label: '{% if paramVal in strings.LOCALIZED_PARM %}{{strings.LOCALIZED_PARM[paramVal]}}{% else %}{{paramVal}}{% endif %}',
                     
                     data: [  
                          {% for point in paramData[paramVal] %} 

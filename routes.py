@@ -17,7 +17,7 @@ from myutils import *
 from main import app
 import json
 
-
+import strings_de as strings
 
 # import module 
 import traceback 
@@ -29,7 +29,7 @@ def send_js(path):
 
 @app.route("/")
 def index():
-    return render_template("/base.html", stations=shared_data.stations, beds=shared_data.beds)
+    return render_template("/base.html",config=config, strings=strings, stations=shared_data.stations, beds=shared_data.beds)
     
     
 @app.route("/sendToGW")
@@ -38,12 +38,12 @@ def sendToGW_view():
         try:
             asyncio.set_event_loop(asyncio.SelectorEventLoop())
             asyncio.get_event_loop().run_until_complete(updateBeds())
-            return render_template("/base.html" , infoType=1, message="Aktualisierung an Monitoring gesendet!",stations=shared_data.stations, beds=shared_data.beds)
+            return render_template("/base.html" ,config=config, strings=strings, infoType=1, message=strings.GW_UPDATE_SENT,stations=shared_data.stations, beds=shared_data.beds)
         except:
             traceback.print_exc() 
-            return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!",stations=shared_data.stations, beds=shared_data.beds)
+            return render_template("/base.html" ,config=config, strings=strings, infoType=2, message=strings.ERR_NO_CON_TO_GW,stations=shared_data.stations, beds=shared_data.beds)
     else:
-        return render_template("/base.html" ,stations=shared_data.stations, beds=shared_data.beds)
+        return render_template("/base.html" ,config=config, strings=strings, stations=shared_data.stations, beds=shared_data.beds)
     
 
     
@@ -65,7 +65,7 @@ def admit_view():
                 updateBedList()
                 return redirect(url_for('sendToGW_view'))
             
-        return render_template("/admit.html", infoType=2, message="Bett existiert nicht!" )
+        return render_template("/admit.html",config=config, strings=strings, infoType=2, message=strings.ERR_BED_DOES_NOT_EXIST )
         
 #        beds[data["bed"]] = newPatient 
 
@@ -75,7 +75,7 @@ def admit_view():
 
 @app.route("/admit/<bed>", methods=['GET', 'POST'])
 def admit_view_filled(bed):
-    return render_template("/admit.html" , bed=bed , beds=shared_data.beds)
+    return render_template("/admit.html" ,config=config, strings=strings, bed=bed , beds=shared_data.beds)
 
   
 
@@ -98,19 +98,19 @@ def discharge_view(patientID):
                             asyncio.set_event_loop(asyncio.SelectorEventLoop())
                             asyncio.get_event_loop().run_until_complete(discharge(patientID))
                             
-                            return render_template("/base.html" , infoType=1, message="Betten aktualisiert!", stations=shared_data.stations,beds=shared_data.beds)
+                            return render_template("/base.html" ,config=config, strings=strings, infoType=1, message=strings.BEDS_REFRESH_SUCCESS, stations=shared_data.stations,beds=shared_data.beds)
                         except:
-                            return render_template("/base.html" , infoType=2, message="Gateway ASYNC Error",stations=shared_data.stations, beds=shared_data.beds)
+                            return render_template("/base.html" ,config=config, strings=strings, infoType=2, message=strings.ERR_GW_ASYNC ,stations=shared_data.stations, beds=shared_data.beds)
                     else:
-                        return render_template("/base.html" ,  stations=shared_data.stations,beds=shared_data.beds)
-        return render_template("/base.html" , infoType=2, message="Bett nicht Gefunden!", beds=shared_data.beds, stations=shared_data.stations)    
+                        return render_template("/base.html" ,config=config, strings=strings,  stations=shared_data.stations,beds=shared_data.beds)
+        return render_template("/base.html" ,config=config, strings=strings, infoType=2, message=strings.ERR_BED_DOES_NOT_EXIST, beds=shared_data.beds, stations=shared_data.stations)    
         
         
         
             
     except:
         traceback.print_exc() 
-        return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!", beds=shared_data.beds,stations=shared_data.stations)
+        return render_template("/base.html" ,config=config, strings=strings, infoType=2, message=strings.ERR_NO_CON_TO_GW , beds=shared_data.beds,stations=shared_data.stations)
         
         
 @app.route("/force_discharge/<patientID>")
@@ -120,11 +120,11 @@ def forcedischarge(patientID):
         asyncio.set_event_loop(asyncio.SelectorEventLoop())
         asyncio.get_event_loop().run_until_complete(discharge(patientID))
         
-        return render_template("/base.html" , infoType=2, message="FORCED Remove Bed!",stations=shared_data.stations, beds=shared_data.beds)
+        return render_template("/base.html" , config=config, strings=strings, infoType=2, message=stirngs.BED_FORCE_DELETE ,stations=shared_data.stations, beds=shared_data.beds)
 
     except:
         traceback.print_exc() 
-        return render_template("/base.html" , infoType=2, message="Keine Verbindung zum Gateway! Es wurden keine Daten ans Monitoring gesendet!",stations=shared_data.stations, beds=shared_data.beds)
+        return render_template("/base.html" ,config=config, strings=strings, infoType=2, message=strings.ERR_NO_CON_TO_GW  ,stations=shared_data.stations, beds=shared_data.beds)
 
 @app.route("/station/<station>")
 def staion_view(station):
@@ -133,7 +133,7 @@ def staion_view(station):
     viewbeds = shared_data.stations[station]
 
 
-    return render_template("/station_overview.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", beds=viewbeds , stations=shared_data.stations,station=station)
+    return render_template("/station_overview.html" ,config=config, strings=strings,  beds=viewbeds , stations=shared_data.stations,station=station)
 
 
 
@@ -162,4 +162,4 @@ def patient_view(patientID):
     #print(paramData)
 
 
-    return render_template("/trends.html" , infoType=1, message="Achtung! IN ENTWICKLUNG!", patient=patient, trendColor=colors, paramLabels= paramLabels,  trends=d, trendscale=dateHeader, paramData=paramData)
+    return render_template("/trends.html" ,config=config, strings=strings,  patient=patient, trendColor=colors, paramLabels= paramLabels,  trends=d, trendscale=dateHeader, paramData=paramData)

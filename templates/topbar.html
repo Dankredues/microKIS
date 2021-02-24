@@ -1,6 +1,8 @@
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <a class="navbar-brand" id="sidebarToggle" href="#" >
-	<img src="https://logodix.com/logo/334588.png" height=72px style="padding-right: 20px; ">MicroKIS for Demonstration</a>
+    <img src="https://logodix.com/logo/334588.png" height=72px style="padding-right: 20px; ">
+        {{config.INSTANCE_NAME}} {%if config.DISPLAY_BRANCH_LABEL%} - ({{config.BRANCH_LABEL}}) {%endif%}
+    </a>
     
     <!-- Navbar Search-->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">

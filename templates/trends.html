@@ -11,6 +11,7 @@
 	<link href="/static/css/styles.css" rel="stylesheet" />
 	<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet"
 		crossorigin="anonymous" />
+		
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"
 		crossorigin="anonymous"></script>
 </head>
@@ -47,17 +48,17 @@
 
 
 				<div class="container-fluid">
-					<h1 class="mt-4">Patientenstatus - {{patient.givenName}}  {{patient.lastName}}</h1>
+					<h1 class="mt-4">{{strings.PATIENT_STATUS}} - {{patient.givenName}}  {{patient.lastName}}</h1>
 					<ol class="breadcrumb mb-4">
 						<li class="breadcrumb-item active">
-							ID :{{patient.patientID}} <br>
-							Liegt auf {{patient.station}} in Bett {{patient.bed}}<br>
+							{{strings.PATIENT_ID}} : {{patient.patientID}} <br>
+							 {{patient.station}}  /   {{patient.bed}}<br>
 							
 						</li>
 					</ol>
 				</div>
 				<div class="container-fluid">
-					<table class="table table-bordered table-hover table-sm">
+					<table id="trendTable" class="table table-bordered table-hover table-sm">
 						<thead>
 							<tr>
 								<th>
@@ -78,7 +79,11 @@
 								{% for parmLabel in paramLabels %}
 								<tr>
 									<td>
-										{{parmLabel}} :
+										{% if parmLabel in strings.LOCALIZED_PARM %}
+											{{strings.LOCALIZED_PARM[parmLabel]}}
+										{% else %}
+											{{parmLabel}}
+										{% endif %}
 									</td>
 									{% for date in trendscale %}
 									<td>
@@ -111,12 +116,21 @@
 
 	{% include 'footer.html' %}
 
-
+	
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
 		crossorigin="anonymous"></script>
 	<script src="/static/vendor/js/scripts.js"></script>
-	
+	<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+	<script>
+	$(document).ready(function () {
+		
+		$('#trendTable').DataTable({
+		"scrollX": true
+		});
+		$('.dataTables_length').addClass('bs-select');
+		});
+	</script>
 </body>
 
 </html>

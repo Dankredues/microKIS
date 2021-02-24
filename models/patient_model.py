@@ -1,5 +1,6 @@
 from collections import defaultdict
-
+import config
+import random
 class PatientRecord:
     def __init__(self, givenName="",lastName="",patientID="",admissionDate="",station="",bed=""):
         self.givenName      =   givenName
@@ -9,10 +10,14 @@ class PatientRecord:
         self.station        =   station
         self.bed            =   bed
         self.trends         =   defaultdict(dict)
+        if config.USE_DEMO_DATA:
+            for i in range(59):
+                self.addTrend("spo2","11:"+f"{i:02d}",random.randrange(80,100,1))
+            
+                self.addTrend("hr","11:"+f"{i:02d}",random.randrange(60,90,5))
+                self.addTrend("NIBP SYS","11:"+f"{i:02d}",random.randrange(100,120,1))
 
-
-       
-    def addTrend(self, name, date, value):        
+    def addTrend(self, name, date, value):   
         self.trends[date][name] = value
 
 

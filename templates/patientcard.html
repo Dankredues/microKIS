@@ -24,9 +24,11 @@
 
 
     <div class="container-fluid">
-        <h1 class="mt-4">Dashboard</h1>
+        <h1 class="mt-4">{{strings.CAPTION_DASHBOARD}}</h1>
         <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">Dashboard</li>
+            <li class="breadcrumb-item active">{{strings.CAPTION_DASHBOARD}} <br> 
+                {%if config.DISPLAY_GW_IP%} GatewayIP - ({{config.HL7_SERVER_IP}}) {%endif%}
+            </li>
         </ol>
 
         <div class="container-fluid">
@@ -63,18 +65,19 @@
                                 <div class="col-9">
                                     <p class="card-text">
                                         {% if beds[bed].patient.givenName is defined %}
-                                        Name : {{beds[bed].patient.givenName}} {{beds[bed].patient.lastName}}<br>
-                                        Patienten ID: {{beds[bed].patient.patientID}}<br>
-                                        Aufnahme : 2021 01 01 14 30<br>
+                                        {{strings.PATIENT_NAME}} : {{beds[bed].patient.givenName}} {{beds[bed].patient.lastName}}<br>
+                                        {{strings.PATIENT_ID}}: {{beds[bed].patient.patientID}}<br>
+                                        {{strings.PATIENT_ADMIT_DATE}} : 2021 01 01 14 30<br>
                                         <a class="btn btn-primary" href="/discharge/{{beds[bed].patient.patientID}}">
-                                            Entlassen</a>
+                                            {{strings.BTN_DISCHARGE}}</a>
                                         <a class="btn btn-primary" href="/viewPatient/{{beds[bed].patient.patientID}}"
-                                            role="button">Details</a>
+                                            role="button">{{strings.BTN_DETAILS}}</a>
                                         {% else %}
-                                        Freies Bett<br>
+                                        {{strings.FREE_BED}}<br>
                                         <br>
-                                        <a class="btn btn-primary" href="/admit/{{beds[bed].bedLabel}}" role="button">Neu
-                                            Aufnehmen</a>
+                                        <a class="btn btn-primary" href="/admit/{{beds[bed].bedLabel}}" role="button">
+                                            {{strings.BTN_ADMIT}}
+                                            </a>
                                         {% endif %}
 
                                     </p>
@@ -89,6 +92,6 @@
                 {% endfor%}
 
             </div>
-            <a class="btn btn-primary" href="/admit" role="button">Neu Aufnehmen</a>
+            <a class="btn btn-primary" href="/admit" role="button">{{strings.BTN_ADMIT}}</a>
         </div>
     </div>
