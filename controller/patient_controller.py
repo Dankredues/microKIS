@@ -10,8 +10,9 @@ import shared_data
 def getPatientFromDBByID(id):
     connection = sqlite3.connect(config.DATABASE_PATH)
     cursor = connection.cursor()
-    sql = "SELECT * FROM patients WHERE patientID='"+str(id)+"'"
-    cursor.execute(sql)
+    sql = "SELECT * FROM patients WHERE patientID=?"
+    sql_data_tuple = (str(id), )
+    cursor.execute(sql, sql_data_tuple)
     patient = None
     for dsatz in cursor:
         patient = PatientRecord(givenName=dsatz[0],lastName=dsatz[1],patientID=dsatz[3],station=dsatz[4],bed=dsatz[5])
@@ -32,15 +33,11 @@ def clearPatient(id):
 def instertPatient(patient):
     connection = sqlite3.connect(config.DATABASE_PATH)
     cursor = connection.cursor()
-    sql = "select max(id) from patients"
-    cursor.execute(sql)
 
-
-         
-    
-    sql = "INSERT INTO patients VALUES('"+patient.givenName+"', " \
-    "'"+patient.lastName+"', "+str(patient.patientID)+", '"+patient.patientID+"', '"+patient.station+"', '"+patient.bed+"')"
-    cursor.execute(sql)
+    sql = "INSERT INTO patients VALUES(?, ?, ?, ? ,?, ?)"
+        
+    sql_data_tuple = (patient.givenName, patient.lastName, patient.patientID, patient.patientID, patient.station,patient.bed)
+    cursor.execute(sql,sql_data_tuple)
     connection.commit()
     connection.close()
     return True
@@ -49,8 +46,9 @@ def deletePatient(patientID):
     connection = sqlite3.connect(config.DATABASE_PATH)
     cursor = connection.cursor()
        
-    sql = "DELETE FROM patients WHERE patientID='"+patientID+"'"
-    cursor.execute(sql)
+    sql = "DELETE FROM patients WHERE patientID=?"
+    sql_data_tuple = (str(patientID),)
+    cursor.execute(sql,sql_data_tuple)
     connection.commit()
     connection.close()
     return True
