@@ -12,11 +12,13 @@ class PatientRecord:
         self.trends         =   defaultdict(dict)
         if config.USE_DEMO_DATA:
             for i in range(59):
-                self.addTrend("spo2","11:"+f"{i:02d}",random.randrange(80,100,1))
-            
-                self.addTrend("hr","11:"+f"{i:02d}",random.randrange(60,90,5))
-                self.addTrend("NIBP SYS","11:"+f"{i:02d}",random.randrange(100,120,1))
-
+                 sys = random.randrange(100,120,1)
+                 dia = random.randrange(80,90,1)
+                 mean = int((sys+dia)/2)
+                 self.addTrend("393216^NIBP_SYS^EHC","11:"+f"{i:02d}",sys)
+                 self.addTrend("393217^NIBP_DIA^EHC","11:"+f"{i:02d}",dia)
+                 self.addTrend("393218^NIBP_MEAN^EHC","11:"+f"{i:02d}",mean)
+                 self.addTrend("327681^SPO2_PR^EHC","11:"+f"{i:02d}",random.randrange(60,90,1))
     def addTrend(self, name, date, value):   
         self.trends[date][name] = value
 

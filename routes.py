@@ -69,7 +69,8 @@ def admit_view():
         
 #        beds[data["bed"]] = newPatient 
 
-        return redirect(url_for('sendToGW_view'))
+        #return redirect(url_for('sendToGW_view'))
+        return redirect("/sendToGW")
 
     return render_template("/admit.html" )
 

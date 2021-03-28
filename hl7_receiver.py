@@ -76,7 +76,7 @@ async def recieiver_loop():
         # Start the server in a with clause to make sure we
         # close it
         async with await start_hl7_server(
-            process_hl7_messages, port=2575
+            process_hl7_messages, port=3360
         ) as hl7_server:
             # And now we server forever. Or until we are
             # cancelled...
